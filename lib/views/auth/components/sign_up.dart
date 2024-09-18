@@ -54,7 +54,8 @@ class SignUp extends StatelessWidget {
               height: 20,
             ),
             ElevatedButton(
-                onPressed: () async {
+                onPressed: ()
+                async {
                   if (controller.txtPassword.text ==
                       controller.txtConfirmPassword.text) {
                     await AuthService.authService
