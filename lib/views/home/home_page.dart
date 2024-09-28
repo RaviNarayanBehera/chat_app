@@ -7,6 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../theme/theme_controller.dart';
+
 var chatController = Get.put(ChatController());
 
 class HomePage extends StatefulWidget {
@@ -41,6 +43,7 @@ class _HomePageState extends State<HomePage> {
     CloudFireStoreService.cloudFireStoreService.changeOnlineStatus(false);
   }
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -206,13 +209,12 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       appBar: AppBar(
-        title: const Text('Home Page'),
+        centerTitle: true,
+        title: const Text('Chats',style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),),
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.tealAccent.shade100,
-                Colors.tealAccent.shade200,
-                Colors.tealAccent.shade100,],
+              colors: [Colors.tealAccent.shade400, Colors.tealAccent.shade200],
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
             ),
@@ -254,37 +256,92 @@ class _HomePageState extends State<HomePage> {
           return Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.tealAccent.shade100,
-                  Colors.tealAccent.shade200,
-                  Colors.tealAccent.shade100,],
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
+                colors: [Colors.tealAccent.shade400, Colors.tealAccent.shade200],
+                begin: Alignment.centerRight,
+                end: Alignment.centerLeft,
               ),
             ),
-            child: ListView.builder(
-              itemCount: userList.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  onTap: () {
-                    chatController.getReceiver(
-                        userList[index].email!, userList[index].name!);
-                    Get.toNamed('/chat');
-                  },
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage(userList[index].image!),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: List.generate(userList.length, (index) {
+                        return Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child: CircleAvatar(
+                                backgroundImage: NetworkImage(userList[index].image!),
+                                radius: 40,
+                              ),
+                            ),
+                            Text(userList[index].name!,style: const TextStyle(fontWeight: FontWeight.w500,fontSize: 15),),
+                          ],
+                        );
+                      }),
+                    ),
                   ),
-                  title: Text(userList[index].name!),
-                  subtitle: Text(userList[index].email!),
-                );
-              },
-            ),
+                  const SizedBox(height: 15),
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors:
+                               // [Colors.black, Colors.black54,Colors.pink.shade900,Colors.purple.shade700,],
+                              [Colors.tealAccent,Colors.tealAccent.shade200, Colors.tealAccent.shade400,Colors.greenAccent,Colors.greenAccent.shade200], // Light mode gradient
+                            begin: Alignment.topRight,
+                            end: Alignment.bottomLeft,
+                          ),
+                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(50), topRight: Radius.circular(50),),
+                          border: const Border(top: BorderSide(color: Colors.black,width: 2))
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 12.0,top: 20),
+                        child: ListView.builder(
+                          itemCount: userList.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              onTap: () {
+                                chatController.getReceiver(
+                                    userList[index].email!, userList[index].name!);
+                                Get.toNamed('/chat');
+                              },
+                              leading: CircleAvatar(
+                                radius: 30,
+                                backgroundImage: NetworkImage(userList[index].image!),
+                              ),
+                              title: Text(userList[index].name!,style: const TextStyle(fontWeight: FontWeight.w500),),
+                              subtitle: Text(userList[index].email!),
+
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
           );
         },
       ),
     );
   }
+
 }
 
 // 12.22
 
 // keytool -list -v -alias androiddebugkey -keystore C:\Users\RAVINARAYAN\.android\debug.keystore
+
+
+
+
+
+
+
