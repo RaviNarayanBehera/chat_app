@@ -7,7 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../theme/theme_controller.dart';
+import '../../main.dart';
 
 var chatController = Get.put(ChatController());
 
@@ -21,33 +21,29 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     CloudFireStoreService.cloudFireStoreService.changeOnlineStatus(true);
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
-    print("------------------------Dispose----------------------");
-
     CloudFireStoreService.cloudFireStoreService.changeOnlineStatus(false);
   }
 
   @override
   void deactivate() {
-    // TODO: implement deactivate
     super.deactivate();
-    print("------------------------Deactivate----------------------");
     CloudFireStoreService.cloudFireStoreService.changeOnlineStatus(false);
   }
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.tealAccent,
       drawer: Drawer(
+        backgroundColor: Colors.tealAccent,
         child: FutureBuilder(
           future: CloudFireStoreService.cloudFireStoreService
               .readCurrentUserFromFireStore(),
@@ -66,13 +62,16 @@ class _HomePageState extends State<HomePage> {
             return Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [
-                    Colors.tealAccent.shade100,
-                    Colors.tealAccent.shade200,
-                    Colors.tealAccent.shade100,
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+                  colors: themeController.isDarkMode.value
+                      ? [
+                          Colors.purple.shade900,
+                          Colors.purple.shade400,
+                          Colors.pinkAccent.shade200,
+                          Colors.pink
+                        ]
+                      : [const Color(0xff1ffbbb), const Color(0xff61fbf1)],
+                  begin: Alignment.bottomLeft,
+                  end: Alignment.topRight,
                 ),
               ),
               child: Column(
@@ -91,11 +90,11 @@ class _HomePageState extends State<HomePage> {
                       Text(
                         userModel.name!,
                         style: const TextStyle(
-                            fontSize: 20,
+                            fontSize: 23,
                             letterSpacing: 1.5,
+                            color: Colors.black,
                             fontWeight: FontWeight.bold),
                       ),
-                      // SizedBox(height: 10,)
                     ],
                   ),
                   ListTile(
@@ -108,9 +107,6 @@ class _HomePageState extends State<HomePage> {
                       Icons.email_outlined,
                       color: Colors.black,
                     ),
-                    onTap: () {
-                      // Do something
-                    },
                   ),
                   ListTile(
                     title: Text(userModel.phone!,
@@ -122,85 +118,82 @@ class _HomePageState extends State<HomePage> {
                       Icons.phone,
                       color: Colors.black,
                     ),
-                    onTap: () {
-                      // Do something
-                    },
                   ),
                   ListTile(
-                    title: const Text('Help Center',
+                    title: const Text('Theme',
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: 20,
                             fontWeight: FontWeight.w500)),
-                    leading: const Icon(
+                    leading: Icon(
+                      Theme.of(context).brightness == Brightness.dark
+                          ? Icons.light_mode
+                          : Icons.dark_mode,
+                      color: themeController.isDarkMode.value
+                          ? Colors.black
+                          : Colors.black,
+                    ),
+                    onTap: () {
+                      themeController.toggleTheme();
+                      if (themeController.isDarkMode.value) {
+                        Get.changeTheme(ThemeData.dark());
+                      } else {
+                        Get.changeTheme(ThemeData.light());
+                      }
+                      setState(() {});
+                    },
+                  ),
+                  const ListTile(
+                    title: Text(
+                      'Help Center',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    leading: Icon(
                       Icons.help_center,
                       color: Colors.black,
                     ),
-                    onTap: () {
-                      // Do something
-                    },
                   ),
-                  ListTile(
-                    title: const Text('Report a Problem',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500)),
-                    leading: const Icon(
+                  const ListTile(
+                    title: Text(
+                      'Report a Problem',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    leading: Icon(
                       Icons.report,
                       color: Colors.black,
                     ),
-                    onTap: () {
-                      // Do something
-                    },
                   ),
-                  ListTile(
-                    title: const Text('Privacy Policy',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500)),
-                    leading: const Icon(
+                  const ListTile(
+                    title: Text(
+                      'Privacy Policy',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    leading: Icon(
                       Icons.policy_outlined,
                       color: Colors.black,
                     ),
-                    onTap: () {
-                      // Do something
-                    },
                   ),
-                  ListTile(
-                    title: const Text('Settings',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500)),
-                    leading: const Icon(
+                  const ListTile(
+                    title: Text(
+                      'Settings',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    leading: Icon(
                       Icons.settings,
                       color: Colors.black,
                     ),
-                    onTap: () {
-                      // Do something
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('Log Out',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500)),
-                    leading: const Icon(
-                      Icons.logout,
-                      color: Colors.black,
-                    ),
-                    onTap: () async {
-                      await AuthService.authService.signOutUser();
-                      await GoogleAuthService.googleAuthService
-                          .signOutFromGoogle();
-                      User? user = AuthService.authService.getCurrentUser();
-                      if (user == null) {
-                        Get.offAndToNamed('/signIn');
-                      }
-                    },
                   ),
                 ],
               ),
@@ -210,11 +203,21 @@ class _HomePageState extends State<HomePage> {
       ),
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Chats',style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),),
+        title: const Text(
+          'Chats',
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+        ),
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.tealAccent.shade400, Colors.tealAccent.shade200],
+              colors: themeController.isDarkMode.value
+                  ? [
+                      Colors.purple.shade800,
+                      Colors.purple.shade400,
+                      Colors.pinkAccent.shade200,
+                      Colors.pink
+                    ]
+                  : [const Color(0xff1ffbbb), const Color(0xff61fbf1)],
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
             ),
@@ -223,14 +226,19 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             onPressed: () async {
-              await AuthService.authService.signOutUser();
+              AuthService.authService.signOutUser();
               await GoogleAuthService.googleAuthService.signOutFromGoogle();
               User? user = AuthService.authService.getCurrentUser();
               if (user == null) {
                 Get.offAndToNamed('/signIn');
               }
             },
-            icon: const Icon(Icons.logout),
+            icon: Icon(
+              Icons.logout_outlined,
+              color: themeController.isDarkMode.value
+                  ? Colors.white
+                  : Colors.black,
+            ),
           ),
         ],
       ),
@@ -239,14 +247,10 @@ class _HomePageState extends State<HomePage> {
             .readAllUserFromCloudFireStore(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Center(
-              child: Text(snapshot.error.toString()),
-            );
+            return Center(child: Text(snapshot.error.toString()));
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           }
           List data = snapshot.data!.docs;
           List<UserModel> userList = [];
@@ -256,92 +260,110 @@ class _HomePageState extends State<HomePage> {
           return Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.tealAccent.shade400, Colors.tealAccent.shade200],
+                colors: themeController.isDarkMode.value
+                    ? [
+                        Colors.purple.shade800,
+                        Colors.purple.shade400,
+                        Colors.pinkAccent.shade200,
+                        Colors.pink
+                      ]
+                    : [const Color(0xff1ffbbb), const Color(0xff61fbf1)],
                 begin: Alignment.centerRight,
                 end: Alignment.centerLeft,
               ),
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: List.generate(userList.length, (index) {
-                        return Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(8),
-                              child: CircleAvatar(
-                                backgroundImage: NetworkImage(userList[index].image!),
-                                radius: 40,
-                              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: List.generate(userList.length, (index) {
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage(userList[index].image!),
+                              radius: 40,
                             ),
-                            Text(userList[index].name!,style: const TextStyle(fontWeight: FontWeight.w500,fontSize: 15),),
-                          ],
-                        );
-                      }),
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-                  Expanded(
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors:
-                               // [Colors.black, Colors.black54,Colors.pink.shade900,Colors.purple.shade700,],
-                              [Colors.tealAccent,Colors.tealAccent.shade200, Colors.tealAccent.shade400,Colors.greenAccent,Colors.greenAccent.shade200], // Light mode gradient
-                            begin: Alignment.topRight,
-                            end: Alignment.bottomLeft,
                           ),
-                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(50), topRight: Radius.circular(50),),
-                          border: const Border(top: BorderSide(color: Colors.black,width: 2))
+                          Text(
+                            userList[index].name!,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 15),
+                          ),
+                        ],
+                      );
+                    }),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                Expanded(
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: themeController.isDarkMode.value
+                            ? [
+                                Colors.black,
+                                Colors.black54,
+                                Colors.pink.shade900,
+                                Colors.purple.shade700,
+                              ]
+                            : [
+                                const Color(0xffd3fbf2),
+                                const Color(0xffd3fbf2),
+                              ],
+                        begin: Alignment.topRight,
+                        end: Alignment.bottomLeft,
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 12.0,top: 20),
-                        child: ListView.builder(
-                          itemCount: userList.length,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              onTap: () {
-                                chatController.getReceiver(
-                                    userList[index].email!, userList[index].name!);
-                                Get.toNamed('/chat');
-                              },
-                              leading: CircleAvatar(
-                                radius: 30,
-                                backgroundImage: NetworkImage(userList[index].image!),
-                              ),
-                              title: Text(userList[index].name!,style: const TextStyle(fontWeight: FontWeight.w500),),
-                              subtitle: Text(userList[index].email!),
-
-                            );
-                          },
-                        ),
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(50),
+                        topRight: Radius.circular(50),
+                      ),
+                      border: const Border(
+                          top: BorderSide(color: Colors.black, width: 2)),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 12.0, top: 20),
+                      child: ListView.builder(
+                        itemCount: userList.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            onTap: () {
+                              chatController.getReceiver(userList[index].email!,
+                                  userList[index].name!);
+                              Get.toNamed('/chat');
+                            },
+                            leading: CircleAvatar(
+                              radius: 30,
+                              backgroundImage:
+                                  NetworkImage(userList[index].image!),
+                            ),
+                            title: Text(
+                              userList[index].name!,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w500),
+                            ),
+                            subtitle: Text(userList[index].email!),
+                          );
+                        },
                       ),
                     ),
                   ),
-                ],
-              ),
-            )
+                ),
+              ],
+            ),
           );
         },
       ),
     );
   }
-
 }
 
-// 12.22
-
-// keytool -list -v -alias androiddebugkey -keystore C:\Users\RAVINARAYAN\.android\debug.keystore
-
-
-
-
-
-
-
+// * New Thing
+// Automatic Drawer Button: When you define a Drawer in the Scaffold,
+// Flutter automatically adds a hamburger menu icon (the leading button) to the AppBar.
+// This button is typically displayed on the left side of the AppBar and allows users to open the drawer.
