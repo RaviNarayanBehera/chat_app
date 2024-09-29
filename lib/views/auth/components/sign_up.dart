@@ -43,95 +43,89 @@ class SignUp extends StatelessWidget {
             end: Alignment.bottomLeft,
           ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AlertDialog(
-              backgroundColor: const Color(0xff98fbf8),
-              shadowColor: Colors.black,
-              title: const Center(child: Text('Create an Account',style: TextStyle(color: Colors.black),)),
-              content: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextField(
-                        controller: controller.txtName,
-                        decoration: const InputDecoration(labelText: "Name",labelStyle: TextStyle(color: Colors.black54),),style: const TextStyle(color: Colors.black),
-                      ),
-                      TextField(
-                        controller: controller.txtEmail,
-                        decoration: const InputDecoration(labelText: "Email",labelStyle: TextStyle(color: Colors.black54)),style: const TextStyle(color: Colors.black),
-                      ),
-                      TextField(
-                        controller: controller.txtPhone,
-                        decoration:
-                            const InputDecoration(labelText: "Phone Number",labelStyle: TextStyle(color: Colors.black54)),style: const TextStyle(color: Colors.black),
-                      ),
-                      TextField(
-                        controller: controller.txtPassword,
-                        decoration: const InputDecoration(labelText: "Password",labelStyle: TextStyle(color: Colors.black54)),style: const TextStyle(color: Colors.black),
-                        obscureText: true,
-                      ),
-                      TextField(
-                        controller: controller.txtConfirmPassword,
-                        decoration:
-                            const InputDecoration(labelText: "Confirm Password",labelStyle: TextStyle(color: Colors.black54)),style: const TextStyle(color: Colors.black),
-                        obscureText: true,
-                      ),
-                      const SizedBox(height: 20),
-                      TextButton(
-                        onPressed: () {
-                          Get.back();
-                        },
-                        child: const Text(
-                          "Already have an account? Sign In",
-                          style: TextStyle(
-                              color: Colors.black, fontSize: 14,fontWeight: FontWeight.w400),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      ElevatedButton(
-                        style: const ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.white)),
-                        onPressed: () async {
-                          if (controller.txtPassword.text ==
-                              controller.txtConfirmPassword.text) {
-                            await AuthService.authService
-                                .createAccountWithEmailAndPassword(
-                              controller.txtEmail.text,
-                              controller.txtPassword.text,
-                            );
-
-                            UserModel user = UserModel(
-                              name: controller.txtName.text,
-                              email: controller.txtEmail.text,
-                              phone: controller.txtPhone.text,
-                              token: "",
-                              image:
-                                  "https://img.freepik.com/premium-photo/stylish-man-flat-vector-profile-picture-ai-generated_606187-310.jpg",
-                            );
-
-                            await CloudFireStoreService.cloudFireStoreService
-                                .insertUserIntoFireStore(user);
-                            Get.back();
-
-                            controller.txtEmail.clear();
-                            controller.txtPassword.clear();
-                            controller.txtName.clear();
-                            controller.txtConfirmPassword.clear();
-                            controller.txtPhone.clear();
-                          }
-                        },
-                        child: const Text('Sign Up',style: TextStyle(color: Colors.black),),
-                      ),
-                    ],
+        child: AlertDialog(
+          backgroundColor: const Color(0xff98fbf8),
+          shadowColor: Colors.black,
+          title: const Center(child: Text('Create an Account',style: TextStyle(color: Colors.black),)),
+          content: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    controller: controller.txtName,
+                    decoration: const InputDecoration(labelText: "Name",labelStyle: TextStyle(color: Colors.black54),),style: const TextStyle(color: Colors.black),
                   ),
-                ),
+                  TextField(
+                    controller: controller.txtEmail,
+                    decoration: const InputDecoration(labelText: "Email",labelStyle: TextStyle(color: Colors.black54)),style: const TextStyle(color: Colors.black),
+                  ),
+                  TextField(
+                    controller: controller.txtPhone,
+                    decoration:
+                        const InputDecoration(labelText: "Phone Number",labelStyle: TextStyle(color: Colors.black54)),style: const TextStyle(color: Colors.black),
+                  ),
+                  TextField(
+                    controller: controller.txtPassword,
+                    decoration: const InputDecoration(labelText: "Password",labelStyle: TextStyle(color: Colors.black54)),style: const TextStyle(color: Colors.black),
+                    obscureText: true,
+                  ),
+                  TextField(
+                    controller: controller.txtConfirmPassword,
+                    decoration:
+                        const InputDecoration(labelText: "Confirm Password",labelStyle: TextStyle(color: Colors.black54)),style: const TextStyle(color: Colors.black),
+                    obscureText: true,
+                  ),
+                  const SizedBox(height: 20),
+                  TextButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    child: const Text(
+                      "Already have an account? Sign In",
+                      style: TextStyle(
+                          color: Colors.black, fontSize: 14,fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    style: const ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.white)),
+                    onPressed: () async {
+                      if (controller.txtPassword.text ==
+                          controller.txtConfirmPassword.text) {
+                        await AuthService.authService
+                            .createAccountWithEmailAndPassword(
+                          controller.txtEmail.text,
+                          controller.txtPassword.text,
+                        );
+
+                        UserModel user = UserModel(
+                          name: controller.txtName.text,
+                          email: controller.txtEmail.text,
+                          phone: controller.txtPhone.text,
+                          token: "",
+                          image:
+                              "https://img.freepik.com/premium-photo/stylish-man-flat-vector-profile-picture-ai-generated_606187-310.jpg",
+                        );
+
+                        await CloudFireStoreService.cloudFireStoreService
+                            .insertUserIntoFireStore(user);
+                        Get.back();
+
+                        controller.txtEmail.clear();
+                        controller.txtPassword.clear();
+                        controller.txtName.clear();
+                        controller.txtConfirmPassword.clear();
+                        controller.txtPhone.clear();
+                      }
+                    },
+                    child: const Text('Sign Up',style: TextStyle(color: Colors.black),),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 30,),
-          ],
+          ),
         ),
       ),
     );

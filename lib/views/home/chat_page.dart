@@ -1,6 +1,7 @@
 import 'package:chat_app/model/chat_model.dart';
 import 'package:chat_app/services/auth_service.dart';
 import 'package:chat_app/services/cloud_firestore_service.dart';
+import 'package:chat_app/services/local_notification_service.dart';
 import 'package:chat_app/views/home/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -251,6 +252,7 @@ class ChatPage extends StatelessWidget {
 
                       await CloudFireStoreService.cloudFireStoreService
                           .addChatInFireStore(chat);
+                      await LocalNotificationService.notificationService.showNotification(AuthService.authService.getCurrentUser()!.email!, chatController.txtMessage.text);
                       chatController.txtMessage.clear();
                     },
                     icon: const Icon(
