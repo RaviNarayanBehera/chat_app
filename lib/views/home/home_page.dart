@@ -3,6 +3,7 @@ import 'package:chat_app/model/user_model.dart';
 import 'package:chat_app/services/auth_service.dart';
 import 'package:chat_app/services/cloud_firestore_service.dart';
 import 'package:chat_app/services/google_auth_service.dart';
+import 'package:chat_app/services/local_notification_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -224,6 +225,14 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         actions: [
+          IconButton(onPressed: () async {
+            await LocalNotificationService.notificationService.scheduleNotification();
+          }, icon: Icon(
+            Icons.notification_add_rounded,
+            color: themeController.isDarkMode.value
+                ? Colors.white
+                : Colors.black,
+          ),),
           IconButton(
             onPressed: () async {
               AuthService.authService.signOutUser();

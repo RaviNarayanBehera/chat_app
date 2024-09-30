@@ -1,4 +1,6 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class LocalNotificationService {
   LocalNotificationService._();
@@ -6,6 +8,12 @@ class LocalNotificationService {
   static LocalNotificationService notificationService =
       LocalNotificationService._();
   FlutterLocalNotificationsPlugin plugin = FlutterLocalNotificationsPlugin();
+  AndroidNotificationDetails androidDetails = const AndroidNotificationDetails(
+    "chat-app",
+    "Local Notification",
+    importance: Importance.max,
+    priority: Priority.max,
+  );
 
   //init
   Future<void> initNotificationService() async {
@@ -22,16 +30,23 @@ class LocalNotificationService {
   }
 
   // show
-  Future<void> showNotification(String title,String body) async {
-    AndroidNotificationDetails androidDetails = const AndroidNotificationDetails(
-      "chat-app",
-      "Local Notification",
-      importance: Importance.max,
-      priority: Priority.max,
-    );
-    NotificationDetails notificationDetails = NotificationDetails(
-      android: androidDetails
-    );
+  Future<void> showNotification(String title, String body) async {
+    NotificationDetails notificationDetails =
+        NotificationDetails(android: androidDetails);
     await plugin.show(0, title, body, notificationDetails);
+  }
+
+  // Schedule Notification
+  Future<void> scheduleNotification() async {
+    tz.Location location = tz.getLocation('Asia/Kolkata');
+    await plugin.zonedSchedule(
+      1,
+      "Enjoy New Features",
+      "Hello Chat App",
+      tz.TZDateTime.now(location).add(const Duration(seconds: 5)),
+      NotificationDetails(android: androidDetails),
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+    );
   }
 }
