@@ -2,6 +2,7 @@ import 'package:chat_app/model/chat_model.dart';
 import 'package:chat_app/services/auth_service.dart';
 import 'package:chat_app/services/cloud_firestore_service.dart';
 import 'package:chat_app/services/local_notification_service.dart';
+import 'package:chat_app/services/storage_service.dart';
 import 'package:chat_app/views/home/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +52,21 @@ class ChatPage extends StatelessWidget {
                       .findUserIsOnlineOrNot(
                           chatController.receiverEmail.value),
                   builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    }
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    }
+                    if (!snapshot.hasData || snapshot.data == null) {
+                      return const Text('User status unavailable');
+                    }
+
                     Map? user = snapshot.data!.data();
+                    if(user == null || user['isOnline']==null)
+                      {
+                        return const Text('User status unavailable');
+                      }
                     return Text(
                       user!['isOnline'] ? 'Online' : '',
                       style: const TextStyle(
@@ -100,6 +115,9 @@ class ChatPage extends StatelessWidget {
                       return const Center(
                         child: CircularProgressIndicator(),
                       );
+                    }
+                    if (!snapshot.hasData || snapshot.data == null) {
+                      return const Center(child: Text('No messages found.'));
                     }
 
                     List data = snapshot.data!.docs;
@@ -200,24 +218,19 @@ class ChatPage extends StatelessWidget {
                                             ? const Color(0xfffb0874)
                                             : const Color(0xff1ffbbb)),
                                   ),
-                                  child: Text(
+                                  child: (chatList[index].image == "" && chatList[index].image!.isEmpty)
+                                      ? Text(
                                     chatList[index].message!,
                                     style: TextStyle(
                                       fontSize: 15,
                                       letterSpacing: 1,
                                       fontWeight: FontWeight.w500,
-                                      color: (chatList[index].sender ==
-                                              AuthService.authService
-                                                  .getCurrentUser()!
-                                                  .email)
-                                          ? (themeController.isDarkMode.value
-                                              ? Colors.black
-                                              : Colors.black)
-                                          : (themeController.isDarkMode.value
-                                              ? Colors.white
-                                              : Colors.black87),
+                                      color: (chatList[index].sender == AuthService.authService.getCurrentUser()!.email)
+                                          ? (themeController.isDarkMode.value ? Colors.black : Colors.black)
+                                          : (themeController.isDarkMode.value ? Colors.white : Colors.black87),
                                     ),
-                                  ),
+                                  )
+                                      : Image.network(chatList[index].image!),
                                 ),
                               ),
                             ),
@@ -237,28 +250,37 @@ class ChatPage extends StatelessWidget {
                   border: const OutlineInputBorder(),
                   focusedBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.black, width: 2),
-                    // Outer border color when focused
                     borderRadius: BorderRadius.circular(10),
                   ),
                   fillColor: Colors.black,
-                  suffixIcon: IconButton(
-                    onPressed: () async {
-                      ChatModel chat = ChatModel(
-                          sender:
-                              AuthService.authService.getCurrentUser()!.email,
-                          receiver: chatController.receiverEmail.value,
-                          message: chatController.txtMessage.text,
-                          time: Timestamp.now());
+                  suffixIcon: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(onPressed: () async {
+                        String url = await StorageService.service.uploadImage();
+                        chatController.getImage(url);
+                      }, icon: const Icon(Icons.photo)),
+                      IconButton(
+                        onPressed: () async {
+                          ChatModel chat = ChatModel(
+                            image: chatController.image.value,
+                              sender:
+                                  AuthService.authService.getCurrentUser()!.email,
+                              receiver: chatController.receiverEmail.value,
+                              message: chatController.txtMessage.text,
+                              time: Timestamp.now());
 
-                      await CloudFireStoreService.cloudFireStoreService
-                          .addChatInFireStore(chat);
-                      await LocalNotificationService.notificationService.showNotification(AuthService.authService.getCurrentUser()!.email!, chatController.txtMessage.text);
-                      chatController.txtMessage.clear();
-                    },
-                    icon: const Icon(
-                      Icons.send_outlined,
-                      size: 30,
-                    ),
+                          await CloudFireStoreService.cloudFireStoreService
+                              .addChatInFireStore(chat);
+                          await LocalNotificationService.notificationService.showNotification(AuthService.authService.getCurrentUser()!.email!, chatController.txtMessage.text);
+                          chatController.txtMessage.clear();
+                        },
+                        icon: const Icon(
+                          Icons.send_outlined,
+                          size: 30,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               )

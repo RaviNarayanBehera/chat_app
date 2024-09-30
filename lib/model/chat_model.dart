@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatModel {
-  String? sender, receiver, message;
+  String? sender, receiver, message,image;
   Timestamp time;
 
   ChatModel({
@@ -9,6 +9,7 @@ class ChatModel {
     required this.receiver,
     required this.message,
     required this.time,
+    required this.image,
   });
 
   factory ChatModel.fromMap(Map m1) {
@@ -17,6 +18,7 @@ class ChatModel {
       receiver: m1['receiver'],
       message: m1['message'],
       time: m1['time'],
+      image:  m1['image'],
     );
   }
 
@@ -26,6 +28,7 @@ class ChatModel {
       'receiver': chat.receiver,
       'message': chat.message,
       'time': chat.time,
+      'image' : chat.image,
     };
   }
 }
