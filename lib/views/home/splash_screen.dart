@@ -1,10 +1,8 @@
 import 'dart:async';
 
 import 'package:chat_app/views/auth/auth_manage.dart';
-import 'package:chat_app/views/auth/components/sign_in.dart';
 import 'package:flutter/material.dart';
 
-import '../../main.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -31,19 +29,14 @@ class SplashScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // CircleAvatar(
-              //   radius: 100,
-              //   backgroundImage: AssetImage('assets/images/logo.png'),
-              //
-              // ),
               Container(
                 height: 500,
                 width: 500,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   image: DecorationImage(image: AssetImage('assets/images/logo.png'))
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
             ],
           ),
         ),
