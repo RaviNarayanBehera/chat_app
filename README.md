@@ -1,16 +1,21 @@
 # chat_app
 
-A new Flutter project.
+<h1 align = "center">
+  <img src="https://github.com/user-attachments/assets/895852d3-e010-4d80-a40f-a06e00dd7df0" height=65%  width=22%>
+  <img src="https://github.com/user-attachments/assets/cb9790d0-f7e3-4ec3-9cf8-765be42ed956" height=65%  width=22%>
+  <img src="https://github.com/user-attachments/assets/4a76086a-5bf2-487a-ae3e-e120e953adcb" height=65%  width=22%>
+</h1>
 
-## Getting Started
+# Dark Mode
+<h1 align = "center">
+  <img src="https://github.com/user-attachments/assets/3bae9e76-b074-4929-aa76-e79f2a0d9557" height=65%  width=22%>
+  <img src="https://github.com/user-attachments/assets/b4da7f5c-b3de-4a85-9473-ef9438c48996" height=65%  width=22%>
+  <img src="https://github.com/user-attachments/assets/208d3669-dba9-499c-a001-22bda6ece1f5" height=65%  width=22%>
+</h1>
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# Light Mode
+<h1 align = "center">
+  <img src="https://github.com/user-attachments/assets/6960d3e0-78a4-4ea1-a746-e284f92725d8" height=65%  width=22%>
+  <img src="https://github.com/user-attachments/assets/7e5304e4-1b35-4bcf-9c04-bf063023b559" height=65%  width=22%>
+  <img src="https://github.com/user-attachments/assets/64d6eb55-6cc6-405a-93b1-bee6d1bdfcd4" height=65%  width=22%>
+</h1>
