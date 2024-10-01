@@ -6,6 +6,7 @@ import 'package:chat_app/views/auth/components/sign_in.dart';
 import 'package:chat_app/views/auth/components/sign_up.dart';
 import 'package:chat_app/views/home/chat_page.dart';
 import 'package:chat_app/views/home/home_page.dart';
+import 'package:chat_app/views/home/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,8 @@ import 'package:timezone/timezone.dart' as tz;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final themeController = Get.put(ThemeController());
+  await themeController.loadTheme();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   tz.initializeTimeZones();
   await LocalNotificationService.notificationService.initNotificationService();
@@ -27,40 +30,43 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: themeController.isDarkMode.value
-          ? ThemeData.dark()
-          : ThemeData.light(),
-      getPages: [
-        GetPage(
-          name: '/',
-          page: () => const AuthManage(),
-        ),
-        GetPage(
-          name: '/signIn',
-          page: () => const SignIn(),
-        ),
-        GetPage(
-          name: '/signUp',
-          page: () => const SignUp(),
-        ),
-        GetPage(
-          name: '/home',
-          page: () => const HomePage(),
-        ),
-        GetPage(
-          name: '/chat',
-          page: () => const ChatPage(),
-        ),
-      ],
+    return Obx(
+      () {
+        return GetMaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: themeController.isDarkMode.value
+              ? ThemeData.dark()
+              : ThemeData.light(),
+          getPages: [
+            GetPage(
+              name: '/',
+              page: () => const SplashScreen(),
+            ),
+            GetPage(
+              name: '/auth',
+              page: () => const AuthManage(),
+            ),
+            GetPage(
+              name: '/signIn',
+              page: () => const SignIn(),
+            ),
+            GetPage(
+              name: '/signUp',
+              page: () => const SignUp(),
+            ),
+            GetPage(
+              name: '/home',
+              page: () => const HomePage(),
+            ),
+            GetPage(
+              name: '/chat',
+              page: () => const ChatPage(),
+            ),
+          ],
+        );
+      },
     );
   }
 }
-
-
-
-
-
 
 // 11:58

@@ -1,6 +1,7 @@
 import 'package:chat_app/controller/auth_controller.dart';
 import 'package:chat_app/services/auth_service.dart';
 import 'package:chat_app/services/google_auth_service.dart';
+import 'package:chat_app/views/home/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -68,6 +69,8 @@ class SignIn extends StatelessWidget {
                   TextButton(
                     onPressed: () {
                       Get.toNamed('/signUp');
+                      controller.txtEmail.clear();
+                      controller.txtPassword.clear();
                     },
                     child: const Center(
                       child: Text(

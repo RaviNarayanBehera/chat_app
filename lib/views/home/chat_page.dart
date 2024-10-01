@@ -230,7 +230,7 @@ class ChatPage extends StatelessWidget {
                                           : (themeController.isDarkMode.value ? Colors.white : Colors.black87),
                                     ),
                                   )
-                                      : Image.network(chatList[index].image!),
+                                      : Image.network(chatList[index].image!,height: 300,),
                                 ),
                               ),
                             ),
@@ -274,6 +274,7 @@ class ChatPage extends StatelessWidget {
                               .addChatInFireStore(chat);
                           await LocalNotificationService.notificationService.showNotification(AuthService.authService.getCurrentUser()!.email!, chatController.txtMessage.text);
                           chatController.txtMessage.clear();
+                          chatController.getImage("");
                         },
                         icon: const Icon(
                           Icons.send_outlined,

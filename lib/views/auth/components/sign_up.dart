@@ -81,6 +81,8 @@ class SignUp extends StatelessWidget {
                   TextButton(
                     onPressed: () {
                       Get.back();
+                      controller.txtEmail.clear();
+                      controller.txtPassword.clear();
                     },
                     child: const Text(
                       "Already have an account? Sign In",
